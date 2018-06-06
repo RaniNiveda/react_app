@@ -24,22 +24,7 @@ class App extends Component {
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
-    });
-    event.persist()
-    /* if (event.target.id === "username")
-    {
-      event.persist()
-      axios.get('http://localhost:8000/api/register_user/')
-      .then(res=>{
-          event.persist()
-          if (event.target.value === res.data[4].username)
-          {
-            console.log(event.target.value)
-            console.log("already exists")
-            console.log(res.data[4].username)
-          }
-      })
-    } */
+    });  
   }
 
  
@@ -105,7 +90,7 @@ class App extends Component {
             type="text"
           />
         </FormGroup>        
-         <Button simple color="success">Register</Button>
+        <Button outline color="success">Register</Button>
       </form>
     );
   }
