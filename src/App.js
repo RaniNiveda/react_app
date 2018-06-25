@@ -3,7 +3,7 @@ import './App.css';
 import {
   FormGroup,
   FormControl,
-  ControlLabel
+  ControlLabel  
 } from "react-bootstrap";
 import { Button } from 'reactstrap';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import axios from 'axios';
 class App extends Component {
    constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this)
     this.state = {
       isLoading: false,
       username: "",
@@ -27,6 +28,12 @@ class App extends Component {
     });  
   }
 
+  getUsernameValidated(){
+      const userName = this.state.username
+      if (userName.length > 5) return 'success';
+      else if(userName.length < 5) return 'error';
+      return null;
+  }
  
 
   handleSubmit = async event => {
@@ -55,17 +62,18 @@ class App extends Component {
   }
 
   renderForm() {
-    return (
+    return (    
       <form onSubmit={this.handleSubmit}>
-        <FormGroup controlId="username"  bsSize="medium">
+        <FormGroup controlId="username" validationState={this.getUsernameValidated()}  bsSize="sm">
           <ControlLabel>User Name</ControlLabel>
           <FormControl
             value={this.state.username}
             onChange={this.handleChange}
             type="input"
           />
+        <FormControl.Feedback />
         </FormGroup>        
-        <FormGroup controlId="email" bsSize="medium">
+        <FormGroup controlId="email" bsSize="sm">
           <ControlLabel>Email</ControlLabel>
           <FormControl
             autoFocus
@@ -74,7 +82,7 @@ class App extends Component {
             onChange={this.handleChange}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="medium">
+        <FormGroup controlId="password" bsSize="sm">
           <ControlLabel>Password</ControlLabel>
           <FormControl
             value={this.state.password}
@@ -82,7 +90,7 @@ class App extends Component {
             type="password"            
           />
         </FormGroup>
-        <FormGroup controlId="mobilnumber" bsSize="medium">
+        <FormGroup controlId="mobilnumber" bsSize="sm">
           <ControlLabel>Mobile Number</ControlLabel>
           <FormControl
             value={this.state.mobilnumber}
