@@ -13,8 +13,9 @@ class App extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this)
     this.state = {
-      isLoading: false,
+      isValid: false,
       username: "",
+      usernameError:"",
       email: "",
       password: "",
       mobilnumber: "",
@@ -28,43 +29,41 @@ class App extends Component {
     });  
   }
 
-  getUsernameValidated(){
-      const userName = this.state.username
-      if (userName.length > 5) return 'success';
-      else if(userName.length < 5) return 'error';
-      return null;
-  }
- 
 
   handleSubmit = async event => {
     event.preventDefault();
+    this.setState({ isValid: true });
+    const len_user = this.state.username
+    if (len_user.length<5){
+        
+        this.setState({ isValid: false });
+        this.setState({ usernameError: "Username must be 5 characters or more" });
+        console.log(this.state.usernameError)
+    }
+    console.log(this.state.isValid)
+    if (this.state.isValid === false){
+      axios.post('http://localhost:8000/api/register_user/', { email: this.state.email, username: this.state.username, password: this.state.password, mobile_number: this.state.mobilnumber })
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
 
-    this.setState({ isLoading: true });
+        this.setState ({
+          isLoading: false,
+          username: "",
+          email: "",
+          password: "",
+          mobilnumber: "",      
+          newUser: null
+        });  
+    }
 
-    this.setState({ newUser: "test" });
-
-    this.setState({ isLoading: false });
-
-    axios.post('http://localhost:8000/api/register_user/', { email: this.state.email, username: this.state.username, password: this.state.password, mobile_number: this.state.mobilnumber })
-    .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
-
-    this.setState ({
-      isLoading: false,
-      username: "",
-      email: "",
-      password: "",
-      mobilnumber: "",      
-      newUser: null
-    });    
   }
 
   renderForm() {
     return (    
       <form onSubmit={this.handleSubmit}>
-        <FormGroup controlId="username" validationState={this.getUsernameValidated()}  bsSize="sm">
+        <FormGroup controlId="username"  bsSize="sm">
           <ControlLabel>User Name</ControlLabel>
           <FormControl
             value={this.state.username}
